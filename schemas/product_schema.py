@@ -5,6 +5,6 @@ class Product(BaseModel):
     desc:str
     price:float
     quantity:int
-    category:str
+    category_id:int
 
     

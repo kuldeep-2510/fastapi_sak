@@ -135,45 +135,36 @@ from schemas.product_schema import Product
 from database import session
 import models.databse_models as databse_models
 
-
 products = [
     Product(
         name="Phone",
         desc="budget phone",
         price=99,
         quantity=10,
-        category="Mobile"
+        category_id=1
     ),
     Product(
         name="Mackbook M1 air",
         desc="M1 chip with 8 core gpu and cpu",
         price=8000,
         quantity=6,
-        category="Laptop"
+        category_id=2
     ),
     Product(
         name="Phone2",
         desc="midrange phone",
         price=199,
         quantity=8,
-        category="Mobile"
+        category_id=1
     ),
     Product(
         name="Mackbook M2",
         desc="10 core gpu and cpu",
         price=9990,
         quantity=4,
-        category="Laptop"
-    ),
-    Product(
-        name="Phone4",
-        desc="budget phone",
-        price=99,
-        quantity=10,
-        category="Mobile"
-    ),
+        category_id=2
+    )
 ]
-
 
 def init_db():
 
@@ -226,18 +217,14 @@ def init_db():
 
             for p in products:
 
-                category = db.query(
-                    databse_models.Category
-                ).filter(
-                    databse_models.Category.name == p.category
-                ).first()
+                
 
                 db_product = databse_models.Product(
                     name=p.name,
                     desc=p.desc,
                     price=p.price,
                     quantity=p.quantity,
-                    category_id=category.id
+                    category_id=p.category_id
                 )
 
                 db.add(db_product)

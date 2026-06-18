@@ -80,10 +80,7 @@ class Productservices:
         category = db.query(
             databse_models.Category
         ).filter(
-            databse_models.Category.name.ilike(
-                product.category.strip()
-            )
-        ).first()
+            databse_models.Category.id==product.category_id).first()
 
         if not category:
 

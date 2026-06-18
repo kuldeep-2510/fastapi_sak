@@ -35,6 +35,53 @@ class CategoryService:
             message="Category created successfully",
             status_code=201
         )
+
+    @staticmethod
+    def update_category(
+        id: int,
+        category,
+        db: Session
+    ):
+
+        db_category = db.query(
+            databse_models.Category
+        ).filter(
+            databse_models.Category.id == id
+        ).first()
+
+        if not db_category:
+
+            return error_response(
+                message="Category not found",
+                status_code=404
+            )
+
+        existing_category = db.query(
+            databse_models.Category
+        ).filter(
+            databse_models.Category.name.ilike(
+                category.name
+            ),
+            databse_models.Category.id != id
+        ).first()
+
+        if existing_category:
+
+            return error_response(
+                message="Category already exists",
+                status_code=409
+            )
+
+        db_category.name = category.name
+
+        db.commit()
+        db.refresh(db_category)
+
+        return success_response(
+            data=db_category,
+            message="Category updated successfully",
+            status_code=200
+        )
     
     @staticmethod
     def get_all_categories(db:Session):

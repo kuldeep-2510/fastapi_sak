@@ -33,6 +33,22 @@ def create_category(
     )
 
 
+#update category name
+@router.put("/{id}")
+def update_category(
+    id: int,
+    category: Category,
+    db: Session = Depends(get_db)
+):
+
+    return CategoryService.update_category(
+        id,
+        category,
+        db
+    )
+
+
+
 @router.get("/")
 def get_categories(
     db:Session=Depends(get_db)
