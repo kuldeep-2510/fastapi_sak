@@ -22,10 +22,11 @@ def get_db():
 
 @router.get("/products")
 def show_all_products(search: str = None,
+                      category: str = None,
                       page:int=1,
                       limit:int=3,
                       db: Session = Depends(get_db)):
-    return Productservices.get_all_products(db,search,page,limit)
+    return Productservices.get_all_products(db,search,category,page,limit)
 
 
 @router.get("/products/{id}")

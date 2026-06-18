@@ -14,6 +14,7 @@ class Productservices:
     def get_all_products(
         db: Session,
         search: str = None,
+        category: str = None,
         page: int = 1,
         limit: int = 3
     ):
@@ -25,6 +26,16 @@ class Productservices:
             query = query.filter(
                 databse_models.Product.name.ilike(
                     f"%{search}%"
+                )
+            )
+
+        if category:
+
+            query = query.join(
+                databse_models.Category
+            ).filter(
+                databse_models.Category.name.ilike(
+                    category
                 )
             )
 
