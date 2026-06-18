@@ -48,18 +48,6 @@ class Productservices:
 
 
     @staticmethod
-    def get_product_by_id(id,db):
-
-        product = db.query(databse_models.Product).filter(databse_models.Product.id == id).first()
-
-        if not product:
-
-            return error_response(message="Product not found",status_code=404)
-
-        return success_response(data=product,message="Product fetched successfully",status_code=200)
-
-    
-    @staticmethod
     def add_product(product: Product, db: Session):
 
         existing_product = db.query(
@@ -77,8 +65,28 @@ class Productservices:
                 status_code=409
             )
 
+        # Category validation
+        category = db.query(
+            databse_models.Category
+        ).filter(
+            databse_models.Category.name.ilike(
+                product.category.strip()
+            )
+        ).first()
+
+        if not category:
+
+            return error_response(
+                message="Category not found",
+                status_code=404
+            )
+
         db_product = databse_models.Product(
-            **product.model_dump()
+            name=product.name,
+            desc=product.desc,
+            price=product.price,
+            quantity=product.quantity,
+            category_id=category.id
         )
 
         db.add(db_product)
