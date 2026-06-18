@@ -33,7 +33,7 @@ def error_response(
     status_code=status_code,
     content=jsonable_encoder(
         {
-            "success": True,
+            "success": False,
             "status_code": status_code,
             "message": message,
             "data": data
