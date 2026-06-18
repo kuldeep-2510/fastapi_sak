@@ -19,7 +19,7 @@ class Productservices:
         limit: int = 3
     ):
 
-        query = db.query(databse_models.Product)
+        query = db.query(databse_models.Product).join(databse_models.Category)
 
         if search:
 
@@ -46,6 +46,18 @@ class Productservices:
         ).all()
         total_records = query.count()
 
+        response_data = []
+
+        for product in products:
+            response_data.append({
+                "id": product.id,
+                "name": product.name,
+                "desc": product.desc,
+                "price": product.price,
+                "quantity": product.quantity,
+                "category": product.category.name
+            })
+
         return success_response(
         message="Products fetched successfully",
         status_code=200,
@@ -54,7 +66,7 @@ class Productservices:
             "limit": limit,
             "total_records": total_records
         },
-        data=products
+        data=response_data
     )
 
 
@@ -123,6 +135,27 @@ class Productservices:
 
         return success_response(message="Product removed successfully",status_code=200)
 
+
+    @staticmethod
+    def get_product_by_id(id: int, db: Session):
+
+        product = db.query(
+            databse_models.Product
+        ).filter(
+            databse_models.Product.id == id
+        ).first()
+
+        if not product:
+            return error_response(
+                message="Product not found",
+                status_code=404
+            )
+
+        return success_response(
+            data=product,
+            message="Product fetched successfully",
+            status_code=200
+        )
 
     
     @staticmethod
